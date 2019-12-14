@@ -5,15 +5,23 @@ puppeteer.use(StealthPlugin())
 
 var browser;
 
-let openBrowser = async (isHeadless, isDevtools) => {
-	browser = await puppeteer.launch({
-		headless: isHeadless,
-		devtools: isDevtools
-	});
+let openBrowser = async (isHeadless, isDevtools, isNoSandboxMode) => {
+	if(isNoSandboxMode) {
+		browser = await puppeteer.launch({
+			headless: isHeadless,
+			devtools: isDevtools,
+			args: ['--no-sandbox']
+		});
+	} else {
+		browser = await puppeteer.launch({
+			headless: isHeadless,
+			devtools: isDevtools
+		});
+	}
 };
 
-function initializeModule(isHeadless, isDevtools, callback) {
-	openBrowser(isHeadless, isDevtools)
+function initializeModule(isHeadless, isDevtools, isNoSandboxMode, callback) {
+	openBrowser(isHeadless, isDevtools, isNoSandboxMode)
 		.then(() => {
 			callback(null, true);
 		})

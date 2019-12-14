@@ -1,13 +1,14 @@
 const Telegraf = require('telegraf');
 
-const stealthyScholarScrapper = require("./stealthyScholarScrapper_v0.js");
+const stealthyScholarScrapper = require("./stealthyScholarScrapper_v0.1.js");
 
 const config = require("./config.js");
 
 const isHeadless = true;
 const isDevtools = false;
+const isNoSandboxMode = true;
 
-stealthyScholarScrapper.initializeModule(isHeadless, isDevtools, function(){
+stealthyScholarScrapper.initializeModule(isHeadless, isDevtools, isNoSandboxMode, function(){
     const bot = new Telegraf(config.TELEGRAM_SECRET_TOKEN);
     bot.start((ctx) => ctx.reply('Welcome Researcher!'))
     bot.help((ctx) => ctx.reply('/bibtex title'))

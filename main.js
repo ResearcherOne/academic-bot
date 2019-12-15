@@ -4,6 +4,10 @@ const stealthyScholarScrapper = require("./stealthyScholarScrapper_v0.1.js");
 
 const config = require("./config.js");
 
+var cache = require('persistent-cache');
+
+var keyValueCache = cache();
+
 const isHeadless = true;
 const isDevtools = false;
 const isNoSandboxMode = true;
@@ -22,14 +26,20 @@ stealthyScholarScrapper.initializeModule(isHeadless, isDevtools, isNoSandboxMode
 
         ctx.reply("Alright. I am working on it.");
 
-        stealthyScholarScrapper.getBibtexOfTopArticleInSearch(receivedTitle, function(err, result){
-            if(!err) {
-                ctx.reply(result);         
-            } else {
-                console.log(err);
-                ctx.reply("Oops, error happend. Sorry.")
-            }
-        });
+        const cachedResponse = keyValueCache.getSync(receivedTitle);
+        if(cachedResponse) {
+            ctx.reply(cachedResponse);
+        } else {
+            stealthyScholarScrapper.getBibtexOfTopArticleInSearch(receivedTitle, function(err, result){
+                if(!err) {
+                    ctx.reply(result);
+                    keyValueCache.putSync(receivedTitle, result);
+                } else {
+                    console.log(err);
+                    ctx.reply("Oops, error happend. Sorry.")
+                }
+            });
+        }
     })
     bot.on('message', function(ctx){
         ctx.reply('Oops, this is not a command. Get help by typing /help')

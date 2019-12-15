@@ -26,6 +26,7 @@ stealthyScholarScrapper.initializeModule(isHeadless, isDevtools, isNoSandboxMode
             if(!err) {
                 ctx.reply(result);         
             } else {
+                console.log(err);
                 ctx.reply("Oops, error happend. Sorry.")
             }
         });

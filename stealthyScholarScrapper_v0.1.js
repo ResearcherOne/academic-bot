@@ -7,11 +7,18 @@ var browser;
 
 let openBrowser = async (isHeadless, isDevtools, isNoSandboxMode) => {
 	if(isNoSandboxMode) {
-		browser = await puppeteer.launch({
-			headless: isHeadless,
-			devtools: isDevtools,
-			args: ['--no-sandbox']
-		});
+		console.log("Browser is lunching.")
+		try {
+			console.log("Launched?")
+			browser = await puppeteer.launch({
+				headless: isHeadless,
+				devtools: isDevtools,
+				args: ['--no-sandbox']
+			});
+		} catch (error) {
+			console.log(error)
+		}
+		console.log("Yo yo yo.")
 	} else {
 		browser = await puppeteer.launch({
 			headless: isHeadless,
